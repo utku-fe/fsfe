@@ -1,16 +1,20 @@
 const express = require("express");
-const http = require("http");
+const http = require("https");
+const fs = require("fs");
 const WebSocket = require("ws");
 
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer({
+  key: fs.readFileSync("/etc/letsencrypt/live/utkutekin.dev/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/utkutekin.dev/fullchain.pem")
+}, app);
 
 app.get("/", function (req, res) {
   res.sendFile("index.html", { root: __dirname });
 });
 
-server.listen(3000, function () {
-  console.log("server started on port 3000");
+server.listen(443, function () {
+  console.log("server started on port 433");
 });
 
 const wss = new WebSocket.Server({ server });
